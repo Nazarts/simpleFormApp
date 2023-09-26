@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SimpleFormApp</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/1bbdeb312a.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <style>
+        .hidden {
+            display: none;
+        }
+    </style>
+    <header class="container-fluid">
+        <div class="bg-primary row justify-content-center">
+            <div class="col-6 fs-2 text-white text-center">
+                Simple site <span class="text-white">logo <i class="fa-regular fa-lightbulb fa-shake"></i></span>
+            </div>
+        </div>
+    </header>
+    <main>
+        <article class="container mt-4" id="main_container">
+            <form id="user_form" class="shadow border border-tertiary py-5 px-3 px-sm-5 rounded-2">
+                <h1 class="text-center text-black fw-bold">Simple signup form</h1>
+                <h3 class="text-center text-secondary fw-bold mb-5">Type below your:</h3>
+                <div class="mb-3 input-group">
+                    <label class="input-group-text">name</label>
+                    <input required id="user_form__name" type="text" placeholder="Some simple name here.." name="name" class="form-control">
+                </div>
+                <div class="mb-3 input-group">
+                    <label class="input-group-text" for="user_form__surname">surname</label>
+                    <input required type="text" id="user_form__surname" name="surname" placeholder="Some simple surname here..." class="form-control">
+                </div>
+                <div class="mb-3 input-group">
+                    <label class="input-group-text" for="user_form__email">@email</label>
+                    <input required id="user_form__email" type="email" placeholder="Some simple email here..." class="form-control">
+                </div>
+                <div class="mb-3">
+                    <input required type="password" id="user_form__password" name="password" placeholder="Some not simple password" class="form-control">
+                </div>
+                <div class="mb-3">
+                    <input required type="password" id="user_form__re_password" name="re_password" placeholder="Re-enter your password" class="form-control">
+                </div>
+                <div class="mt-2 text-center">
+                    <button type="button" id="btn_submit" class="button shadow-sm py-2 fs-5 btn btn-primary">Simple push button</button>
+                </div>
+            </form>
+        </article>
+    </main>
+    <script src="js/main.js"></script>
+</body>
+</html>
