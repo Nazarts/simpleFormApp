@@ -42,8 +42,24 @@ function validateSubmit(form, data) {
     return isValid;
 }
 
-function handleSuccess() {
-
+function handleSuccess(resp) {
+    document.getElementById('success_signup').classList.toggle('hidden');
+    let table = document.getElementById('table');
+    resp.users.forEach((user) => {
+        let t_row = document.createElement('div');
+        t_row.classList.add('d-flex');
+        t_row.classList.add('bg-dark');
+        t_row.classList.add('rounded-2');
+        t_row.classList.add('mb-2');
+        t_row.classList.add('p-2');
+        t_row.classList.add('justify-content-between');
+        t_row.innerHTML = `
+            <p class="text-white">Id: ${user['id']}</p>
+            <p class="text-white">Email: ${user['email']}</p>
+            <p class="text-white">Name: ${user['name']}</p>
+        `
+        table.appendChild(t_row);
+    })
 }
 
 function handleResponse(request) {
@@ -52,6 +68,8 @@ function handleResponse(request) {
             let form = document.getElementById('user_form');
             if (request.status === 200) {
                 form.classList.toggle('hidden');
+                let response = JSON.parse(request.responseText);
+                handleSuccess(response);
             }
             else if (request.status === 400) {
                 let response = JSON.parse(request.responseText);

@@ -1,6 +1,6 @@
 <?php
 
-const USER_DB = [
+$USER_DB = [
     ['id' => 1, 'name' => 'Nothing', 'password' => '12', 'email' => 'Test@'],
     ['id' => 2, 'name' => 'John Doe', 'password' => 'password123', 'email' => 'johndoe@example.com'],
     ['id' => 3, 'name' => 'Alice Smith', 'password' => 'secret456', 'email' => 'alice@example.com'],
@@ -28,18 +28,40 @@ $status = 200;
 
 $errors = [];
 
-function validateUser($email): bool
+$log_file = 'logs/'.date('Y-m-d') . '.log';
+
+function validateUser($email, $log_name): bool
 {
-    foreach (USER_DB as $user) {
+    global $USER_DB;
+    foreach ($USER_DB as $user) {
         if ($email == $user['email']) {
+            file_put_contents($log_name, 'INFO\tUser found with email\t'.$email, FILE_APPEND);
             return true;
         }
     }
+    $USER_DB[] = [
+        'id' => sizeof($USER_DB) + 1,
+        'name' => $_POST['name'],
+        'password' => $_POST['password'],
+        'email' => $_POST['email']
+    ];
+    file_put_contents($log_name, "INFO\t-\tUser not found: ".$email, FILE_APPEND);
     return false;
 }
 
-function make_response($response_body, $code) {
-    file_put_contents(date('Y-m-d') . '.log', 'Error: Not found value for email');
+function make_response($response_body, $code, $log_file): void
+{
+    if ($code < 300) {
+        file_put_contents($log_file, "Success");
+    }
+    else {
+        $message = "\nError\t- Error validation";
+        foreach ($response_body as $item) {
+            $message = $message."\n\t".$item['message'];
+        }
+
+        file_put_contents($log_file, $message, FILE_APPEND);
+    }
     header("Content-Type: application/json");
     http_response_code($code);
     echo json_encode($response_body);
@@ -50,8 +72,6 @@ if (!isset($_POST['email'])) {
     $errors[] = ['message' => 'Email field should be present'];
 }
 elseif (strpos($_POST['email'], '@') === false) {
-    file_put_contents(date('Y-m-d') . '.log', $_POST['email']);
-
     $status = 400;
     $errors[] = ['message' => 'Email field should have "@" sign'];
 }
@@ -66,8 +86,9 @@ elseif ($_POST['password'] != $_POST['re_password']) {
 }
 
 if (sizeof($errors) > 0) {
-    make_response($errors, $status);
+    make_response($errors, $status, $log_file);
 }
 else {
-    make_response(['status' => true], $status);
+    validateUser($_POST['email'], $log_file);
+    make_response(['status' => true, "users" => $USER_DB], $status, $log_file);
 }
